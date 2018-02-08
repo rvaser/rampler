@@ -27,18 +27,17 @@ Optionally, you can run `sudo make install` to install rampler executable to you
 ## Usage
 Usage of rampler is as following:
 
-    rampler [options ...] <reference length> <sequences>
+    rampler [options ...] <sequences> <reference length> <coverage> [<coverage> ...]
 
+        <sequences>
+            input file in FASTA/FASTQ format containing sequences to be subsampled
         <reference length>
             integer denoting length of the reference genome (or assembly)
             from which the sequences originate
-        <sequences>
-            input file in FASTA/FASTQ format containing seqeunces to be subsampled
+        <coverage>
+            integer denoting desired coverage of the subsampled sequences
 
     options:
-        -c, --coverage <int>
-            default: 30
-            desired coverage of the subsampled sequences
         -h, --help
             prints out the help
 

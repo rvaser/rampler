@@ -10,7 +10,9 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(rampler
-    src/main.cpp)
+    src/main.cpp
+    src/sequence.cpp
+    src/subsampler.cpp)
 
 add_subdirectory(vendor/bioparser EXCLUDE_FROM_ALL)
 
