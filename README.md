@@ -10,12 +10,12 @@ Module for sampling genomic sequences.
 To install Rampler run the following commands:
 
 ```bash
-    git clone --recursive https://github.com/rvaser/rampler.git rampler
-    cd rampler
-    mkdir build
-    cd build
-    cmake -DCMAKE_BUILD_TYPE=Release ..
-    make
+git clone --recursive https://github.com/rvaser/rampler.git rampler
+cd rampler
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make
 ```
 
 After successful installation, an executable named `rampler` will appear in `build/bin`.
