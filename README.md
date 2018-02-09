@@ -25,7 +25,9 @@ Optionally, you can run `sudo make install` to install rampler executable to you
 ***Note***: if you omitted `--recursive` from `git clone`, run `git submodule init` and `git submodule update` before proceeding with compilation.
 
 ## Usage
-usage: rampler [options ...] <mode>
+Usage of rampler is as following:
+
+    usage: rampler [options ...] <mode>
 
     <mode>
         subsample <sequences> <reference length> <coverage> [<coverage> ...]
