@@ -1,6 +1,6 @@
 # Rampler
 
-Module for subsampling genomic sequences.
+Module for sampling genomic sequences.
 
 ## Dependencies
 1. gcc 4.8+ or clang 3.4+
@@ -18,24 +18,35 @@ To install Rampler run the following commands:
     make
 ```
 
-After successfull installation, an executable named `rampler` will appear in `build/bin`.
+After successful installation, an executable named `rampler` will appear in `build/bin`.
 
 Optionally, you can run `sudo make install` to install rampler executable to your machine.
 
 ***Note***: if you omitted `--recursive` from `git clone`, run `git submodule init` and `git submodule update` before proceeding with compilation.
 
 ## Usage
-Usage of rampler is as following:
+usage: rampler [options ...] <mode>
 
-    rampler [options ...] <sequences> <reference length> <coverage> [<coverage> ...]
+    <mode>
+        subsample <sequences> <reference length> <coverage> [<coverage> ...]
 
-        <sequences>
-            input file in FASTA/FASTQ format containing sequences to be subsampled
-        <reference length>
-            integer denoting length of the reference genome (or assembly)
-            from which the sequences originate
-        <coverage>
-            integer denoting desired coverage of the subsampled sequences
+            <sequences>
+                input file in FASTA/FASTQ format containing sequences
+                to be subsampled
+            <reference length>
+                integer denoting length of the reference genome (or
+                assembly) from which the sequences originate
+            <coverage>
+                integer denoting desired coverage of the subsampled
+                sequences
+
+        split <sequences> <chunk size>
+
+            <sequences>
+                input file in FASTA/FASTQ format containing sequences
+                which will be split into smaller chunks
+            <chunk size>
+                integer denoting the desired chunk size in bytes
 
     options:
         -h, --help

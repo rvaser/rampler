@@ -12,9 +12,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_executable(rampler
     src/main.cpp
     src/sequence.cpp
-    src/subsampler.cpp)
+    src/sampler.cpp)
 
-add_subdirectory(vendor/bioparser EXCLUDE_FROM_ALL)
+if (NOT TARGET bioparser)
+    add_subdirectory(vendor/bioparser EXCLUDE_FROM_ALL)
+endif()
 
 target_link_libraries(rampler bioparser)
 
