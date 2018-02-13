@@ -20,9 +20,10 @@ std::unique_ptr<Sampler> createSampler(const std::string& sequences_path) {
     std::unique_ptr<bioparser::Parser<Sequence>> sparser = nullptr;
 
     uint64_t extension_begin = sequences_path.rfind('.');
-
+    auto base_name = sequences_path.substr(0, extension_begin);
     auto extension = sequences_path.substr(std::min(extension_begin,
         sequences_path.size()));
+
     if (extension == ".fasta" || extension == ".fa") {
         sparser = bioparser::createParser<bioparser::FastaParser, Sequence>(
             sequences_path);
@@ -35,10 +36,6 @@ std::unique_ptr<Sampler> createSampler(const std::string& sequences_path) {
             ".fasta, .fa, .fastq, .fq)!\n", sequences_path.c_str());
         exit(1);
     }
-
-    uint32_t base_name_begin = sequences_path.find_last_of("/\\") + 1;
-    std::string base_name = sequences_path.substr(base_name_begin,
-        extension_begin - base_name_begin);
 
     return std::unique_ptr<Sampler>(new Sampler(std::move(sparser), base_name,
         extension));
