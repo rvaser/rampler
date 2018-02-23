@@ -1,6 +1,6 @@
 # Rampler
 
-[![Build status for c++/clang++](https://travis-ci.org/isovic/rampler.svg?branch=master)](https://travis-ci.org/rvaser/rampler)
+[![Build status for c++/clang++](https://travis-ci.org/rvaser/rampler.svg?branch=master)](https://travis-ci.org/rvaser/rampler)
 
 Module for sampling genomic sequences.
 
