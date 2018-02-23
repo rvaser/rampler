@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
             case 'h':
             default:
                 help();
-                exit(1);
+                exit(0);
         }
     }
 
@@ -44,7 +44,6 @@ int main(int argc, char** argv) {
         do_split = true;
     } else {
         fprintf(stderr, "[rampler::] error: unkown mode %s!\n", input_parameters[0].c_str());
-        help();
         exit(1);
     }
 
