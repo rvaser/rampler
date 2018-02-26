@@ -7,7 +7,10 @@
 
 #include "bioparser/bioparser.hpp"
 
+static const char* version = "v0.5.0";
+
 static struct option options[] = {
+    {"version", no_argument, 0, 'v'},
     {"help", no_argument, 0, 'h'},
     {0, 0, 0, 0}
 };
@@ -19,8 +22,11 @@ int main(int argc, char** argv) {
     std::vector<std::string> input_parameters;
 
     char argument;
-    while ((argument = getopt_long(argc, argv, "h", options, nullptr)) != -1) {
+    while ((argument = getopt_long(argc, argv, "", options, nullptr)) != -1) {
         switch (argument) {
+            case 'v':
+                printf("%s\n", version);
+                exit(0);
             case 'h':
                 help();
                 exit(0);
@@ -96,6 +102,8 @@ void help() {
         "                integer denoting the desired chunk size in bytes\n"
         "\n"
         "    options:\n"
-        "        -h, --help\n"
-        "            prints out the help\n");
+        "        --version\n"
+        "            prints the version number\n"
+        "        --help\n"
+        "            prints the usage\n");
 }
