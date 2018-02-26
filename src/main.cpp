@@ -22,14 +22,15 @@ int main(int argc, char** argv) {
     while ((argument = getopt_long(argc, argv, "h", options, nullptr)) != -1) {
         switch (argument) {
             case 'h':
-            default:
                 help();
                 exit(0);
+            default:
+                exit(1);
         }
     }
 
     if (optind == argc) {
-        help();
+        fprintf(stderr, "[rampler::] error: too few arguments!\n");
         exit(1);
     }
 
@@ -51,7 +52,6 @@ int main(int argc, char** argv) {
         (do_split && input_parameters.size() < 2)) {
 
         fprintf(stderr, "[rampler::] error: missing input parameter(s)!\n");
-        help();
         exit(1);
     }
 
