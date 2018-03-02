@@ -19,21 +19,32 @@ std::unique_ptr<Sampler> createSampler(const std::string& sequences_path) {
 
     std::unique_ptr<bioparser::Parser<Sequence>> sparser = nullptr;
 
-    uint64_t extension_begin = sequences_path.rfind('.');
-    auto base_name = sequences_path.substr(0, extension_begin);
-    auto extension = sequences_path.substr(std::min(extension_begin,
-        sequences_path.size()));
+    std::string base_name = sequences_path.substr(sequences_path.rfind('/') + 1);
+    base_name = base_name.substr(0, base_name.find('.'));
+    std::string extension;
 
-    if (extension == ".fasta" || extension == ".fa") {
+    auto is_suffix = [](const std::string& src, const std::string& suffix) -> bool {
+        if (src.size() < suffix.size()) {
+            return false;
+        }
+        return src.compare(src.size() - suffix.size(), suffix.size(), suffix) == 0;
+    };
+
+    if (is_suffix(sequences_path, ".fasta") || is_suffix(sequences_path, ".fa") ||
+        is_suffix(sequences_path, ".fasta.gz") || is_suffix(sequences_path, ".fa.gz")) {
         sparser = bioparser::createParser<bioparser::FastaParser, Sequence>(
             sequences_path);
-    } else if (extension == ".fastq" || extension == ".fq") {
+        extension = ".fasta";
+    } else if (is_suffix(sequences_path, ".fastq") || is_suffix(sequences_path, ".fq") ||
+        is_suffix(sequences_path, ".fastq.gz") || is_suffix(sequences_path, ".fq.gz")) {
         sparser = bioparser::createParser<bioparser::FastqParser, Sequence>(
             sequences_path);
+        extension = ".fastq";
     } else {
         fprintf(stderr, "[rampler::createSampler] error: "
             "file %s has unsupported format extension (valid extensions: "
-            ".fasta, .fa, .fastq, .fq)!\n", sequences_path.c_str());
+            ".fasta, .fasta.gz, .fa, .fa.gz, .fastq, .fastq.gz, .fq, .fq.gz)!\n",
+            sequences_path.c_str());
         exit(1);
     }
 
@@ -73,7 +84,8 @@ void Sampler::initialize() {
     }
 }
 
-void Sampler::subsample(uint32_t reference_length, uint32_t coverage) {
+void Sampler::subsample(const std::string& out_directory, uint32_t reference_length,
+    uint32_t coverage) {
 
     if (coverage * reference_length > sequences_length_) {
         fprintf(stderr, "[rampler::Sampler::subsample] warning: "
@@ -88,9 +100,14 @@ void Sampler::subsample(uint32_t reference_length, uint32_t coverage) {
     double ratio = (coverage * reference_length) / static_cast<double>(
         sequences_length_);
 
-    std::string out_path = base_name_ + "_" + std::to_string(coverage) + "x" +
-        extension_;
+    std::string out_path = out_directory + "/" + base_name_ + "_" +
+        std::to_string(coverage) + "x" + extension_;
     auto out = fopen(out_path.c_str(), "w");
+    if (out == nullptr) {
+        fprintf(stderr, "rampler::Sampler::subsample] error: "
+            "unable to create file %s!\n", out_path.c_str());
+        exit(1);
+    }
 
     sparser_->reset();
     while (true) {
@@ -117,7 +134,7 @@ void Sampler::subsample(uint32_t reference_length, uint32_t coverage) {
     fclose(out);
 }
 
-void Sampler::split(uint32_t chunk_size) {
+void Sampler::split(const std::string& out_directory, uint32_t chunk_size) {
 
     if (chunk_size > sequences_length_) {
         fprintf(stderr, "[rampler::Sampler::split] warning: "
@@ -132,9 +149,14 @@ void Sampler::split(uint32_t chunk_size) {
         std::vector<std::unique_ptr<Sequence>> sequences;
         auto status = sparser_->parse_objects(sequences, chunk_size);
 
-        std::string out_path = base_name_ + "_" + std::to_string(chunk_number) +
-            extension_;
+        std::string out_path = out_directory + "/" + base_name_ + "_" +
+            std::to_string(chunk_number) + extension_;
         auto out = fopen(out_path.c_str(), "w");
+        if (out == nullptr) {
+            fprintf(stderr, "rampler::Sampler::subsample] error: "
+                "unable to create file %s!\n", out_path.c_str());
+            exit(1);
+        }
 
         for (const auto& it: sequences) {
             if (it->quality().empty()) {

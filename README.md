@@ -1,5 +1,6 @@
 # Rampler
 
+[![Latest GitHub release](https://img.shields.io/github/release/rvaser/rampler.svg)](https://github.com/rvaser/rampler/releases/latest)
 [![Build status for c++/clang++](https://travis-ci.org/rvaser/rampler.svg?branch=master)](https://travis-ci.org/rvaser/rampler)
 
 Module for sampling genomic sequences.
@@ -24,7 +25,7 @@ After successful installation, an executable named `rampler` will appear in `bui
 
 Optionally, you can run `sudo make install` to install rampler executable to your machine.
 
-***Note***: if you omitted `--recursive` from `git clone`, run `git submodule init` and `git submodule update` before proceeding with compilation.
+***Note***: if you omitted `--recursive` from `git clone`, run `git submodule update --init --recursive` before proceeding with compilation.
 
 ## Usage
 Usage of rampler is as following:
@@ -35,8 +36,8 @@ Usage of rampler is as following:
         subsample <sequences> <reference length> <coverage> [<coverage> ...]
 
             <sequences>
-                input file in FASTA/FASTQ format containing sequences
-                to be subsampled
+                input file in FASTA/FASTQ format (can be compressed with gzip)
+                containing sequences to be subsampled
             <reference length>
                 integer denoting length of the reference genome (or
                 assembly) from which the sequences originate
@@ -47,12 +48,17 @@ Usage of rampler is as following:
         split <sequences> <chunk size>
 
             <sequences>
-                input file in FASTA/FASTQ format containing sequences
-                which will be split into smaller chunks
+                input file in FASTA/FASTQ format (can be compressed with gzip)
+                containing sequences which will be split into smaller chunks
             <chunk size>
                 integer denoting the desired chunk size in bytes
 
     options:
+        -o, --out-directory
+            default: current directory
+            path in which sampled files will be created
+        --version
+            prints the version number
         -h, --help
             prints out the help
 

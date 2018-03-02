@@ -7,9 +7,10 @@
 
 #include "bioparser/bioparser.hpp"
 
-static const char* version = "v0.5.0";
+static const char* version = "v1.0.0";
 
 static struct option options[] = {
+    {"out-directory", required_argument, 0, 'o'},
     {"version", no_argument, 0, 'v'},
     {"help", no_argument, 0, 'h'},
     {0, 0, 0, 0}
@@ -21,9 +22,14 @@ int main(int argc, char** argv) {
 
     std::vector<std::string> input_parameters;
 
+    std::string out_directory = ".";
+
     char argument;
-    while ((argument = getopt_long(argc, argv, "", options, nullptr)) != -1) {
+    while ((argument = getopt_long(argc, argv, "o:h", options, nullptr)) != -1) {
         switch (argument) {
+            case 'o':
+                out_directory = optarg;
+                break;
             case 'v':
                 printf("%s\n", version);
                 exit(0);
@@ -37,6 +43,7 @@ int main(int argc, char** argv) {
 
     if (optind == argc) {
         fprintf(stderr, "[rampler::] error: too few arguments!\n");
+        help();
         exit(1);
     }
 
@@ -54,8 +61,8 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
-    if ((do_subsample && input_parameters.size() < 3) ||
-        (do_split && input_parameters.size() < 2)) {
+    if ((do_subsample && input_parameters.size() < 4) ||
+        (do_split && input_parameters.size() < 3)) {
 
         fprintf(stderr, "[rampler::] error: missing input parameter(s)!\n");
         exit(1);
@@ -65,11 +72,12 @@ int main(int argc, char** argv) {
     sampler->initialize();
 
     if (do_split) {
-        sampler->split(atoi(input_parameters[2].c_str()));
+        sampler->split(out_directory, atoi(input_parameters[2].c_str()));
     } else if (do_subsample) {
         uint32_t reference_length = atoi(input_parameters[2].c_str());
         for (uint32_t i = 3; i < input_parameters.size(); ++i) {
-            sampler->subsample(reference_length, atoi(input_parameters[i].c_str()));
+            sampler->subsample(out_directory, reference_length,
+                atoi(input_parameters[i].c_str()));
         }
     }
 
@@ -84,8 +92,8 @@ void help() {
         "        subsample <sequences> <reference length> <coverage> [<coverage> ...]\n"
         "\n"
         "            <sequences>\n"
-        "                input file in FASTA/FASTQ format containing sequences\n"
-        "                to be subsampled\n"
+        "                input file in FASTA/FASTQ format (can be compressed with gzip)\n"
+        "                containing sequences to be subsampled\n"
         "            <reference length>\n"
         "                integer denoting length of the reference genome (or\n"
         "                assembly) from which the sequences originate\n"
@@ -96,14 +104,17 @@ void help() {
         "        split <sequences> <chunk size>\n"
         "\n"
         "            <sequences>\n"
-        "                input file in FASTA/FASTQ format containing sequences\n"
-        "                which will be split into smaller chunks\n"
+        "                input file in FASTA/FASTQ format (can be compressed with gzip)\n"
+        "                containing sequences which will be split into smaller chunks\n"
         "            <chunk size>\n"
         "                integer denoting the desired chunk size in bytes\n"
         "\n"
         "    options:\n"
+        "        -o, --out-directory\n"
+        "            default: current directory\n"
+        "            path in which sampled files will be created\n"
         "        --version\n"
         "            prints the version number\n"
-        "        --help\n"
+        "        -h, --help\n"
         "            prints the usage\n");
 }

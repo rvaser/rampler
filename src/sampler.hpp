@@ -26,9 +26,10 @@ public:
 
     void initialize();
 
-    void subsample(uint32_t reference_length, uint32_t coverage);
+    void subsample(const std::string& out_directory, uint32_t reference_length,
+        uint32_t coverage);
 
-    void split(uint32_t chunk_size);
+    void split(const std::string& out_directory, uint32_t chunk_size);
 
     friend std::unique_ptr<Sampler> createSampler(const std::string& sequences_path);
 private:
