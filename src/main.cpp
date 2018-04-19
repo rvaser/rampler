@@ -7,7 +7,7 @@
 
 #include "bioparser/bioparser.hpp"
 
-static const char* version = "v1.0.0";
+static const char* version = "v1.1.0";
 
 static struct option options[] = {
     {"out-directory", required_argument, 0, 'o'},
