@@ -3,7 +3,9 @@
 [![Latest GitHub release](https://img.shields.io/github/release/rvaser/rampler.svg)](https://github.com/rvaser/rampler/releases/latest)
 [![Build status for c++/clang++](https://travis-ci.org/rvaser/rampler.svg?branch=master)](https://travis-ci.org/rvaser/rampler)
 
-Module for sampling genomic sequences.
+Standalone module for sampling genomic sequences. It supports two modes, random subsampling of sequencer data to a desired depth (given the reference length) and file splitting to desired size in bytes.
+
+Rampler takes as first input argument a file in FASTA/FASTQ format which can be compressed with gzip. The rest of input parameters depend on the mode of operation. The output is stored into a file(s) which is in the same format as the input file but uncompressed.
 
 ## Dependencies
 1. gcc 4.8+ or clang 3.4+
