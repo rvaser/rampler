@@ -72,7 +72,7 @@ void Sampler::initialize() {
     sparser_->reset();
     while (true) {
         std::vector<std::unique_ptr<Sequence>> sequences;
-        auto status = sparser_->parse_objects(sequences, kChunkSize);
+        auto status = sparser_->parse(sequences, kChunkSize);
 
         for (const auto& it: sequences) {
             sequences_length_ += it->data().size();
@@ -112,7 +112,7 @@ void Sampler::subsample(const std::string& out_directory, uint32_t reference_len
     sparser_->reset();
     while (true) {
         std::vector<std::unique_ptr<Sequence>> sequences;
-        auto status = sparser_->parse_objects(sequences, kChunkSize);
+        auto status = sparser_->parse(sequences, kChunkSize);
 
         for (const auto& it: sequences) {
             if (distribution(generator) < ratio) {
@@ -147,7 +147,7 @@ void Sampler::split(const std::string& out_directory, uint32_t chunk_size) {
     sparser_->reset();
     while (true) {
         std::vector<std::unique_ptr<Sequence>> sequences;
-        auto status = sparser_->parse_objects(sequences, chunk_size);
+        auto status = sparser_->parse(sequences, chunk_size);
 
         std::string out_path = out_directory + "/" + base_name_ + "_" +
             std::to_string(chunk_number) + extension_;
