@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
 
     std::string out_directory = ".";
 
-    char argument;
+    signed char argument;
     while ((argument = getopt_long(argc, argv, "o:h", options, nullptr)) != -1) {
         switch (argument) {
             case 'o':
