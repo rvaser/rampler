@@ -1,7 +1,7 @@
 # Rampler
 
 [![Latest GitHub release](https://img.shields.io/github/release/rvaser/rampler.svg)](https://github.com/rvaser/rampler/releases/latest)
-[![Build status for c++/clang++](https://travis-ci.org/rvaser/rampler.svg?branch=master)](https://travis-ci.org/rvaser/rampler)
+[![Build status for c++/clang++](https://travis-ci.com/rvaser/rampler.svg?branch=master)](https://travis-ci.com/rvaser/rampler)
 
 Standalone module for sampling genomic sequences. It supports two modes, random subsampling of sequencer data to a desired depth (given the reference length) and file splitting to desired size in bytes.
 
