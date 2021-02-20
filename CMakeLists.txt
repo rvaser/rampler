@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
 
-project(rampler VERSION 2.0.0
+project(rampler VERSION 2.0.1
                 LANGUAGES CXX
                 DESCRIPTION "Rampler is a tool for subsampling or splitting FASTA/Q files.")
 

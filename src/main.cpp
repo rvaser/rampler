@@ -33,11 +33,11 @@ std::unique_ptr<bioparser::Parser<biosoup::Sequence>> CreateParser(
   *name = (c == std::string::npos ? path : path.substr(c + 1));
 
   c = name->find('.');
-  *ext = (c == std::string::npos ? "" : name->substr(c, name->find('.', c + 1) - c));  // NOLINT
   *name = (c == std::string::npos ? *name : name->substr(0, c));
 
   if (is_suffix(path, ".fasta")    || is_suffix(path, ".fa") ||
       is_suffix(path, ".fasta.gz") || is_suffix(path, ".fa.gz")) {
+    *ext = ".fasta";
     try {
       return bioparser::Parser<biosoup::Sequence>::Create<bioparser::FastaParser>(path);  // NOLINT
     } catch (const std::invalid_argument& exception) {
@@ -47,6 +47,7 @@ std::unique_ptr<bioparser::Parser<biosoup::Sequence>> CreateParser(
   }
   if (is_suffix(path, ".fastq")    || is_suffix(path, ".fq") ||
       is_suffix(path, ".fastq.gz") || is_suffix(path, ".fq.gz")) {
+    *ext = ".fastq";
     try {
       return bioparser::Parser<biosoup::Sequence>::Create<bioparser::FastqParser>(path);  // NOLINT
     } catch (const std::invalid_argument& exception) {
