@@ -10,8 +10,6 @@
 
 namespace rampler {
 
-constexpr uint32_t kChunkSize = 1024 * 1024 * 1024;  // ~ 1GB
-
 Sampler::Sampler(
     std::unique_ptr<bioparser::Parser<biosoup::Sequence>> sparser,
     const std::string& base_name,
@@ -42,8 +40,8 @@ void Sampler::Initialize() {
 
 void Sampler::Subsample(
     const std::string& out_directory,
-    std::uint32_t reference_length,
-    std::uint32_t coverage) {
+    std::uint64_t reference_length,
+    std::uint64_t coverage) {
   if (coverage * reference_length > sequences_length_) {
     std::cerr << "[rampler::Sampler::subsample] warning: "
               << "insufficient data for coverage of " << coverage
@@ -92,7 +90,7 @@ void Sampler::Subsample(
   ofs.close();
 }
 
-void Sampler::Split(const std::string& out_directory, std::uint32_t chunk_size) {  // NOLINT
+void Sampler::Split(const std::string& out_directory, std::uint64_t chunk_size) {  // NOLINT
   if (chunk_size > sequences_length_) {
     std::cerr << "[rampler::Sampler::split] warning: "
               << "insufficient data for chunk size " << chunk_size
@@ -100,7 +98,7 @@ void Sampler::Split(const std::string& out_directory, std::uint32_t chunk_size) 
     return;
   }
 
-  uint32_t chunk_number = 0;
+  std::size_t chunk_number = 0;
 
   sparser_->Reset();
   while (true) {

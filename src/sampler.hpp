@@ -35,10 +35,10 @@ class Sampler {
 
   void Subsample(
       const std::string& out_directory,
-      std::uint32_t reference_length,
-      std::uint32_t coverage);
+      std::uint64_t reference_length,
+      std::uint64_t coverage);
 
-  void Split(const std::string& out_directory, std::uint32_t chunk_size);
+  void Split(const std::string& out_directory, std::uint64_t chunk_size);
 
  private:
   std::unique_ptr<bioparser::Parser<biosoup::Sequence>> sparser_;

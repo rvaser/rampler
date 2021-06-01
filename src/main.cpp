@@ -150,14 +150,14 @@ int main(int argc, char** argv) {
   sampler.Initialize();
 
   if (split) {
-    sampler.Split(out_directory, atoi(input_parameters[2].c_str()));
+    sampler.Split(out_directory, std::atoll(input_parameters[2].c_str()));
   } else if (subsample) {
-    std::uint32_t reference_length = atoi(input_parameters[2].c_str());
+    std::uint64_t reference_length = std::atoll(input_parameters[2].c_str());
     for (std::uint32_t i = 3; i < input_parameters.size(); ++i) {
       sampler.Subsample(
           out_directory,
           reference_length,
-          atoi(input_parameters[i].c_str()));
+          std::atoll(input_parameters[i].c_str()));
     }
   }
 
