@@ -13,8 +13,6 @@ std::atomic<std::uint32_t> biosoup::Sequence::num_objects{0};
 
 namespace {
 
-static const char* rampler_version = RAMPLER_VERSION;
-
 static struct option options[] = {
   {"out-directory", required_argument, nullptr, 'o'},
   {"version", no_argument, nullptr, 'v'},
@@ -104,7 +102,7 @@ int main(int argc, char** argv) {
   while ((arg = getopt_long(argc, argv, "o:h", options, nullptr)) != -1) {
     switch (arg) {
       case 'o': out_directory = optarg; break;
-      case 'v': std::cerr << rampler_version << std::endl; return 0;
+      case 'v': std::cerr << VERSION << std::endl; return 0;
       case 'h': Help(); return 0;
       default: return 1;
     }

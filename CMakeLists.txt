@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.11)
 
-project(rampler VERSION 2.1.0
+project(rampler VERSION 2.1.1
                 LANGUAGES CXX
                 DESCRIPTION "Rampler is a tool for subsampling or splitting FASTA/Q files.")
 
@@ -13,21 +13,51 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
-if (NOT TARGET bioparser)
-  add_subdirectory(vendor/bioparser EXCLUDE_FROM_ALL)
-endif ()
-if (NOT TARGET biosoup)
-  add_subdirectory(vendor/bioparser/vendor/biosoup EXCLUDE_FROM_ALL)
+include(FetchContent)
+include(GNUInstallDirs)
+
+find_package(bioparser 3.0.15 QUIET)
+if (NOT bioparser_FOUND)
+  FetchContent_Declare(
+    bioparser
+    GIT_REPOSITORY https://github.com/rvaser/bioparser
+    GIT_TAG 3.0.15)
+
+  FetchContent_GetProperties(bioparser)
+  if (NOT bioparser_POPULATED)
+    FetchContent_Populate(bioparser)
+    add_subdirectory(
+      ${bioparser_SOURCE_DIR}
+      ${bioparser_BINARY_DIR}
+      EXCLUDE_FROM_ALL)
+  endif ()
 endif ()
 
-add_executable(${PROJECT_NAME}
+find_package(biosoup 0.10.0 QUIET)
+if (NOT biosoup_FOUND)
+  FetchContent_Declare(
+    biosoup
+    GIT_REPOSITORY https://github.com/rvaser/biosoup
+    GIT_TAG 0.10.0)
+
+  FetchContent_GetProperties(biosoup)
+  if (NOT biosoup_POPULATED)
+    FetchContent_Populate(biosoup)
+    add_subdirectory(
+      ${biosoup_SOURCE_DIR}
+      ${biosoup_BINARY_DIR}
+      EXCLUDE_FROM_ALL)
+  endif ()
+endif ()
+
+add_executable(rampler
   src/main.cpp
   src/sampler.cpp)
-target_link_libraries(${PROJECT_NAME}
-  bioparser
-  biosoup)
-target_compile_definitions(${PROJECT_NAME} PRIVATE
-  RAMPLER_VERSION="v${PROJECT_VERSION}")
 
-include(GNUInstallDirs)
-install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
+target_link_libraries(rampler
+  bioparser::bioparser
+  biosoup::biosoup)
+
+target_compile_definitions(rampler PRIVATE VERSION="${PROJECT_VERSION}")
+
+install(TARGETS rampler DESTINATION ${CMAKE_INSTALL_BINDIR})
